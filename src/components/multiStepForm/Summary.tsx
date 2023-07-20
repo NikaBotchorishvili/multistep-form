@@ -1,4 +1,4 @@
-function StepFour() {
+function Summary() {
     return (
         <h1>
             Four
@@ -6,4 +6,4 @@ function StepFour() {
     );
 }
 
-export default StepFour;
+export default Summary;
