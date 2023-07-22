@@ -4,61 +4,36 @@ import { Context } from "../Context/MultiStepContext";
 
 
 function Sidebar() {
-	const { currentStepIndex } = useContext(Context);
+	const {currentStepIndex, sidebar, goto } = useContext(Context);
 
-
+	const content = sidebar?.map((el, index) => {
+		return (
+			<div className="flex justify-evenly  items-center cursor-pointer" onClick={() => goto(index)}>
+				<h2 className={
+					`flex items-center justify-center    w-8 h-8  rounded-full 
+					${index == currentStepIndex ? "bg-PastelBlue text-MarineBlue": "text-White"}`
+					}>
+					{el.number}
+				</h2>
+				<div className="hidden md:flex flex-col md:basis-32 ">
+					<small className="text-LightGray font-thin">
+						{el.step}
+					</small>
+					<h2 className="text-xl text-White">{el.title}</h2>
+				</div>
+			</div>
+		)
+	})
 	return (
-		<div className="relative">
+		<div className="absolute top-0 left-0 md:relative">
 			<img
-				srcSet="images/bg-sidebar-desktop.svg 1000w, images/bg-sidebar-mobile.svg 768w"
+				srcSet="images/bg-sidebar-desktop.svg 1000w, images/bg-sidebar-mobile.svg 767w"
 				alt=""
-				className="md:h-full w-full h-fit "
+				className="md:h-full w-screen md:w-full "
 			/>
-			<div className=" flex flex-col absolute top-20 w-full gap-4 ">
-				<div className="flex justify-evenly  items-center">
-					<h2 className="flex items-center justify-center text-White  bg-MarineBlue w-8 h-8  rounded-full">
-						1
-					</h2>
-					<div className="flex flex-col basis-32">
-						<small className="text-LightGray font-thin">
-							STEP 1
-						</small>
-						<h2 className="text-xl text-White">Your Info</h2>
-					</div>
-				</div>
-				<div className="flex justify-evenly w-full items-center">
-					<h2 className="flex items-center justify-center text-White   w-8 h-8  rounded-full">
-						2
-					</h2>
-					<div className="flex flex-col basis-32">
-						<small className="text-LightGray font-thin">
-							STEP 2
-						</small>
-						<h2 className="text-xl text-White">SELECT PLAN</h2>
-					</div>
-				</div>
-				<div className="flex justify-evenly w-full items-center">
-					<h2 className="flex items-center justify-center text-White   w-8 h-8  rounded-full">
-						3
-					</h2>
-					<div className="flex flex-col basis-32">
-						<small className="text-LightGray font-thin">
-							STEP 3
-						</small>
-						<h2 className="text-xl text-White">ADD-ONS</h2>
-					</div>
-				</div>
-				<div className="flex justify-evenly w-full items-center">
-					<h2 className="flex items-center justify-center text-White   w-8 h-8  rounded-full">
-						4
-					</h2>
-					<div className="flex flex-col basis-32">
-						<small className="text-LightGray font-thin">
-							STEP 4
-						</small>
-						<h2 className="text-xl text-White ">SUMMARY</h2>
-					</div>
-				</div>
+
+			<div className=" flex md:flex-col absolute justify-center gap-5 top-20 w-full md:gap-4  ">
+{content}
 			</div>
 		</div>
 	);

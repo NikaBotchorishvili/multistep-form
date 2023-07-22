@@ -22,6 +22,12 @@ type titleType ={
 	description: string,
 }
 
+type Sidebar = {
+	number: number,
+	step: string,
+	title: string,
+}
+
 export type ContextType = {
 	currentStepIndex: number;
 	step: ReactElement;
@@ -30,9 +36,11 @@ export type ContextType = {
 	next: Function;
 	goto: Function;
 	handlePersonalizeChange: Function;
-	title: titleType,
+	title: titleType;
 	formData: formData;
+	sidebar: Sidebar[];
 };
+
 
 
 export const Context = createContext<Partial<ContextType>>({});
@@ -59,12 +67,36 @@ function ContextProvider({ children, steps }: ContextProps) {
 		},
 	];
 
+	const sidebar: Sidebar[] = [
+		{
+			number: 1,
+			step: "Step 1",
+			title: "YOUR INFO"
+		},
+		{
+			number: 2,
+			step: "Step 2",
+			title: "SELECT PLAN"
+		},
+		{
+			number: 3,
+			step: "Step 3",
+			title: "ADD-ONS"
+		},
+		{
+			number: 4,
+			step: "Step 4",
+			title: "SUMMARY"
+		}
+	]
+
 	const title: titleType =
 		titles[currentStepIndex];
 	const [formData, setFormData] = useState<formData>({
 		name: "",
 		email: "",
 		phone_number: "",
+		
 	});
 
 	const next = () => {
@@ -105,6 +137,7 @@ function ContextProvider({ children, steps }: ContextProps) {
 		handlePersonalizeChange: handleChange,
 		formData,
 		title,
+		sidebar: sidebar,
 	};
 
 	return <Context.Provider value={ContextData}>{children}</Context.Provider>;
