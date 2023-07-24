@@ -19,7 +19,7 @@ function PersonalInfo() {
 					className="border border-CoolGray p-2 rounded-md"
 					type="text"
 					name="name"
-					value={formData?.name}
+					value={formData?.personalize.name}
 					placeholder="e.g. Stephen King"
 					onChange={(e) => handlePersonalizeChange(e)}
 				/>
@@ -32,7 +32,7 @@ function PersonalInfo() {
 					className="border border-CoolGray p-2 rounded-md"
 					type="email"
 					name="email"
-					value={formData.email}
+					value={formData?.personalize.email}
 					placeholder="e.g. stephenking@lorem.com"
 					onChange={(e) => handlePersonalizeChange(e)}
 				/>
@@ -45,7 +45,7 @@ function PersonalInfo() {
 					className="border border-CoolGray p-2 rounded-md"
 					type="text"
 					name="phone_number"
-					value={formData?.phone_number}
+					value={formData?.personalize.phone_number}
 					placeholder="e.g. +1 234 567 890"
 					required
 					onChange={(e) => handleChange(e)}

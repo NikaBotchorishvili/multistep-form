@@ -8,7 +8,7 @@ function Sidebar() {
 
 	const content = sidebar?.map((el, index) => {
 		return (
-			<div className="flex justify-evenly  items-center cursor-pointer" onClick={() => goto(index)}>
+			<div key={index} className="flex justify-evenly  items-center cursor-pointer" onClick={() => goto(index)}>
 				<h2 className={
 					`flex items-center justify-center    w-8 h-8  rounded-full 
 					${index == currentStepIndex ? "bg-PastelBlue text-MarineBlue": "text-White"}`

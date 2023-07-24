@@ -12,9 +12,16 @@ type ContextProps = {
 };
 
 type formData = {
-	name: string;
-	email: string;
-	phone_number: string;
+	personalize:{
+		name: string;
+		email: string;
+		phone_number: string;
+	};
+	plan: {
+		type: "monthly" | "yearly",
+		selected: string,
+		price: number,
+	}
 };
 
 type titleType ={
@@ -32,10 +39,12 @@ export type ContextType = {
 	currentStepIndex: number;
 	step: ReactElement;
 	steps: ReactElement[];
-	back: Function;
-	next: Function;
-	goto: Function;
-	handlePersonalizeChange: Function;
+	back: () => void;
+	next: () => void;
+	goto: (index: number) => void;
+	isRadioSelected: (name: string) => boolean;
+	handlePersonalizeChange: (e: ChangeEvent<HTMLInputElement>) => void;
+	handleSelectPlanChange: (price: number, plan: string) => void;
 	title: titleType;
 	formData: formData;
 	sidebar: Sidebar[];
@@ -92,10 +101,18 @@ function ContextProvider({ children, steps }: ContextProps) {
 
 	const title: titleType =
 		titles[currentStepIndex];
+
 	const [formData, setFormData] = useState<formData>({
-		name: "",
-		email: "",
-		phone_number: "",
+		personalize:{
+			name: "",
+			email: "",
+			phone_number: "",
+		},
+		plan: {
+			type: "monthly",
+			selected: "advanced",
+			price: 0,
+		}
 		
 	});
 
@@ -120,13 +137,22 @@ function ContextProvider({ children, steps }: ContextProps) {
 			return prevCurrentStepIndex - 1;
 		});
 	};
-
-	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+	const isRadioSelected = (name: string) => {
+		return formData.plan.selected == name;
+	}
+	const handlePersonalizeChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
 		setFormData((prev) => {
-			return { ...prev, [name]: value };
+			return { ...prev, personalize: { ...prev.personalize, [name]: value} };
 		});
 	};
+
+	const handleSelectPlanChange = (price: number, plan: string) => {
+		setFormData((prev) => {
+			return {...prev, plan: { ...prev.plan, price: price, selected: plan }}
+		})
+	}
+
 	const ContextData: Required<ContextType> = {
 		currentStepIndex,
 		step: steps[currentStepIndex],
@@ -134,10 +160,12 @@ function ContextProvider({ children, steps }: ContextProps) {
 		back,
 		next,
 		goto,
-		handlePersonalizeChange: handleChange,
+		handlePersonalizeChange,
+		handleSelectPlanChange,
 		formData,
 		title,
-		sidebar: sidebar,
+		sidebar,
+		isRadioSelected
 	};
 
 	return <Context.Provider value={ContextData}>{children}</Context.Provider>;
