@@ -184,8 +184,9 @@ function ContextProvider({ children, steps }: ContextProps) {
 			const updatedAddOns = prev.addOns.map(addOn => {
 				if (addOn.name === name) {
 					return { ...addOn, selected: !addOn.selected };
+				}else{
+					return addOn;
 				}
-				return addOn;
 			});
 
 			return {
