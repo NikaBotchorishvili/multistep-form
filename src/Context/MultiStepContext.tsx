@@ -11,29 +11,40 @@ type ContextProps = {
 	steps: ReactElement[];
 };
 
-type formData = {
-	personalize:{
-		name: string;
-		email: string;
-		phone_number: string;
-	};
-	plan: {
-		type: "monthly" | "yearly",
-		selected: string,
-		price: number,
-	}
+type Personalize = {
+	name: string;
+	email: string;
+	phone_number: string;
 };
 
-type titleType ={
-	title: string,
-	description: string,
-}
+type Plan = {
+	type: "monthly" | "yearly";
+	selected: string;
+	price: number;
+};
+
+type addOn = {
+	name: string;
+	price: number;
+	description: string;
+	selected: boolean;
+};
+type formData = {
+	personalize: Personalize;
+	plan: Plan;
+	addOns: addOn[];
+};
+
+type titleType = {
+	title: string;
+	description: string;
+};
 
 type Sidebar = {
-	number: number,
-	step: string,
-	title: string,
-}
+	number: number;
+	step: string;
+	title: string;
+};
 
 export type ContextType = {
 	currentStepIndex: number;
@@ -45,12 +56,11 @@ export type ContextType = {
 	isRadioSelected: (name: string) => boolean;
 	handlePersonalizeChange: (e: ChangeEvent<HTMLInputElement>) => void;
 	handleSelectPlanChange: (price: number, plan: string) => void;
+	handleAddOnChange: (name: string) => void;
 	title: titleType;
 	formData: formData;
 	sidebar: Sidebar[];
 };
-
-
 
 export const Context = createContext<Partial<ContextType>>({});
 
@@ -80,30 +90,29 @@ function ContextProvider({ children, steps }: ContextProps) {
 		{
 			number: 1,
 			step: "Step 1",
-			title: "YOUR INFO"
+			title: "YOUR INFO",
 		},
 		{
 			number: 2,
 			step: "Step 2",
-			title: "SELECT PLAN"
+			title: "SELECT PLAN",
 		},
 		{
 			number: 3,
 			step: "Step 3",
-			title: "ADD-ONS"
+			title: "ADD-ONS",
 		},
 		{
 			number: 4,
 			step: "Step 4",
-			title: "SUMMARY"
-		}
-	]
+			title: "SUMMARY",
+		},
+	];
 
-	const title: titleType =
-		titles[currentStepIndex];
+	const title: titleType = titles[currentStepIndex];
 
 	const [formData, setFormData] = useState<formData>({
-		personalize:{
+		personalize: {
 			name: "",
 			email: "",
 			phone_number: "",
@@ -112,8 +121,27 @@ function ContextProvider({ children, steps }: ContextProps) {
 			type: "monthly",
 			selected: "advanced",
 			price: 0,
-		}
-		
+		},
+		addOns: [
+			{
+				name: "online services",
+				price: 1,
+				description: "Access to multiplayer games",
+				selected: false,
+			},
+			{
+				name: "Larger Storage",
+				price: 2,
+				description: "extra 1TB of cloud service",
+				selected: false,
+			},
+			{
+				name: "Customizable Profile",
+				price: 2,
+				description: "Custom theme on your profile",
+				selected: false,
+			},
+		],
 	});
 
 	const next = () => {
@@ -139,19 +167,42 @@ function ContextProvider({ children, steps }: ContextProps) {
 	};
 	const isRadioSelected = (name: string) => {
 		return formData.plan.selected == name;
-	}
+	};
+
 	const handlePersonalizeChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
 		setFormData((prev) => {
-			return { ...prev, personalize: { ...prev.personalize, [name]: value} };
+			return {
+				...prev,
+				personalize: { ...prev.personalize, [name]: value },
+			};
+		});
+	};
+
+	const handleAddOnChange = (name: string) => {
+		setFormData((prev) => {
+			const updatedAddOns = prev.addOns.map(addOn => {
+				if (addOn.name === name) {
+					return { ...addOn, selected: !addOn.selected };
+				}
+				return addOn;
+			});
+
+			return {
+				...prev,
+				addons: updatedAddOns,
+			};
 		});
 	};
 
 	const handleSelectPlanChange = (price: number, plan: string) => {
 		setFormData((prev) => {
-			return {...prev, plan: { ...prev.plan, price: price, selected: plan }}
-		})
-	}
+			return {
+				...prev,
+				plan: { ...prev.plan, price: price, selected: plan },
+			};
+		});
+	};
 
 	const ContextData: Required<ContextType> = {
 		currentStepIndex,
@@ -162,10 +213,11 @@ function ContextProvider({ children, steps }: ContextProps) {
 		goto,
 		handlePersonalizeChange,
 		handleSelectPlanChange,
+		handleAddOnChange,
 		formData,
 		title,
 		sidebar,
-		isRadioSelected
+		isRadioSelected,
 	};
 
 	return <Context.Provider value={ContextData}>{children}</Context.Provider>;

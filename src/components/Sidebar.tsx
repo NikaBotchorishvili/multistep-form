@@ -29,7 +29,7 @@ function Sidebar() {
 			<img
 				srcSet="images/bg-sidebar-desktop.svg 1000w, images/bg-sidebar-mobile.svg 767w"
 				alt=""
-				className="md:h-full w-screen md:w-full "
+				className="md:h-full w-screen md:w-full rounded-3xl"
 			/>
 
 			<div className=" flex md:flex-col absolute justify-center gap-5 top-20 w-full md:gap-4  ">
