@@ -17,8 +17,10 @@ type Personalize = {
 	phone_number: string;
 };
 
+type PlanType = "monthly" | "yearly";
+
 type Plan = {
-	type: "monthly" | "yearly";
+	type: PlanType;
 	selected: string;
 	price: number;
 };
@@ -31,7 +33,7 @@ type addOn = {
 };
 type formData = {
 	personalize: Personalize;
-	plan: Plan;
+	plan: Plan | {};
 	addOns: addOn[];
 };
 
@@ -60,12 +62,51 @@ export type ContextType = {
 	title: titleType;
 	formData: formData;
 	sidebar: Sidebar[];
+	planType: boolean;
+	handleSetPlanType: () => void;
+	handleSubmitFinish: () => void;
+	finished: boolean;
 };
 
 export const Context = createContext<Partial<ContextType>>({});
 
 function ContextProvider({ children, steps }: ContextProps) {
 	const [currentStepIndex, setCurrentStepIndex] = useState(0);
+
+	//	false it corresponds to monthly, true to yearly
+	const [planType, setPlanType] = useState(false);
+
+	const [finished, setFinished] = useState(false);
+
+	const [formData, setFormData] = useState<formData>({
+		personalize: {
+			name: "",
+			email: "",
+			phone_number: "",
+		},
+		plan: {},
+		addOns: [
+			{
+				name: "online services",
+				price: 1,
+				description: "Access to multiplayer games",
+				selected: false,
+			},
+			{
+				name: "Larger Storage",
+				price: 2,
+				description: "extra 1TB of cloud service",
+				selected: false,
+			},
+			{
+				name: "Customizable Profile",
+				price: 2,
+				description: "Custom theme on your profile",
+				selected: false,
+			},
+		],
+	});
+
 	const titles: titleType[] = [
 		{
 			title: "Personal Info",
@@ -111,39 +152,6 @@ function ContextProvider({ children, steps }: ContextProps) {
 
 	const title: titleType = titles[currentStepIndex];
 
-	const [formData, setFormData] = useState<formData>({
-		personalize: {
-			name: "",
-			email: "",
-			phone_number: "",
-		},
-		plan: {
-			type: "monthly",
-			selected: "advanced",
-			price: 0,
-		},
-		addOns: [
-			{
-				name: "online services",
-				price: 1,
-				description: "Access to multiplayer games",
-				selected: false,
-			},
-			{
-				name: "Larger Storage",
-				price: 2,
-				description: "extra 1TB of cloud service",
-				selected: false,
-			},
-			{
-				name: "Customizable Profile",
-				price: 2,
-				description: "Custom theme on your profile",
-				selected: false,
-			},
-		],
-	});
-
 	const next = () => {
 		setCurrentStepIndex((prevCurrentStepIndex) => {
 			if (prevCurrentStepIndex + 1 >= steps.length) {
@@ -168,7 +176,9 @@ function ContextProvider({ children, steps }: ContextProps) {
 	const isRadioSelected = (name: string) => {
 		return formData.plan.selected == name;
 	};
-
+	const handleSetPlanType = () => {
+		setPlanType((prev) => !prev);
+	};
 	const handlePersonalizeChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
 		setFormData((prev) => {
@@ -181,10 +191,10 @@ function ContextProvider({ children, steps }: ContextProps) {
 
 	const handleAddOnChange = (name: string) => {
 		setFormData((prev) => {
-			const updatedAddOns = prev.addOns.map(addOn => {
+			const updatedAddOns = prev.addOns.map((addOn) => {
 				if (addOn.name === name) {
 					return { ...addOn, selected: !addOn.selected };
-				}else{
+				} else {
 					return addOn;
 				}
 			});
@@ -198,6 +208,7 @@ function ContextProvider({ children, steps }: ContextProps) {
 
 	const handleSelectPlanChange = (price: number, plan: string) => {
 		setFormData((prev) => {
+			console.log(prev.plan);
 			return {
 				...prev,
 				plan: { ...prev.plan, price: price, selected: plan },
@@ -205,6 +216,9 @@ function ContextProvider({ children, steps }: ContextProps) {
 		});
 	};
 
+	const handleSubmitFinish = () => {
+		setFinished(prev => !prev);
+	};
 	const ContextData: Required<ContextType> = {
 		currentStepIndex,
 		step: steps[currentStepIndex],
@@ -219,6 +233,10 @@ function ContextProvider({ children, steps }: ContextProps) {
 		title,
 		sidebar,
 		isRadioSelected,
+		planType,
+		handleSetPlanType,
+		handleSubmitFinish,
+		finished,
 	};
 
 	return <Context.Provider value={ContextData}>{children}</Context.Provider>;

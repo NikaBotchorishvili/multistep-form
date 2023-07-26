@@ -1,25 +1,27 @@
-import { useContext, MouseEvent } from "react";
+import { useContext, useEffect } from "react";
 import Input from "./components/input";
 import { Context } from "../../../Context/MultiStepContext";
 
 function SelectYourPlan() {
-	const { formData } = useContext(Context);
+	const { planType, handleSetPlanType } = useContext(Context);
 
-	const inputData = {
-		monthly: {
-			arcade: 9,
-			advanced: 12,
-			pro: 15,
-		},
-		yearly: {
-			arcade: 90,
-			advanced: 120,
-			pro: 150,
-		},
-	};
+	// const inputData = {
+	// 	monthly: {
+	// 		arcade: 9,
+	// 		advanced: 12,
+	// 		pro: 15,
+	// 	},
+	// 	yearly: {
+	// 		arcade: 90,
+	// 		advanced: 120,
+	// 		pro: 150,
+	// 	},
+	// };
+	useEffect(() => {
 
-	return (
-		<form className="flex gap-4 md:flex-row flex-col md:w-fit w-full">
+	}, [planType])
+	const content = !planType ? (
+		<>
 			<Input
 				icon="/images/icon-arcade.svg"
 				PlanName="arcade"
@@ -38,7 +40,64 @@ function SelectYourPlan() {
 				price={15}
 				type="monthly"
 			/>
-		</form>
+		</>
+	) : (
+		<>
+			<Input
+				icon="/images/icon-arcade.svg"
+				PlanName="arcade"
+				price={90}
+				type="yearly"
+			/>
+			<Input
+				icon="/images/icon-advanced.svg"
+				PlanName="advanced"
+				price={120}
+				type="yearly"
+			/>
+			<Input
+				icon="/images/icon-pro.svg"
+				PlanName="pro"
+				price={150}
+				type="yearly"
+			/>
+		</>
+	);
+	return (
+		<>
+			<form className="flex gap-4 md:flex-row flex-col md:w-fit w-full ">
+				{content}
+			</form>
+			<section className="flex  items-center gap-2 mx-auto">
+				<h2
+					className={`font-extrabold text-xl ${
+						!planType ? "text-MarineBlue" : "text-CoolGray"
+					}`}
+				>
+					Monthly
+				</h2>
+				<div className="w-24 h-8 bg-MarineBlue relative rounded-full">
+					<input
+						type="checkbox"
+						className=" w-full h-full absolute opacity-0 top-0 left-0"
+						checked={planType}
+						onChange={() => handleSetPlanType()}
+					/>
+					<span
+						className={`w-8 h-8 rounded-full bg-LightBlue absolute transition duration-200 ${
+							planType ? "right-0" : "left-0"
+						}`}
+					></span>
+				</div>
+				<h2
+					className={`font-extrabold text-xl ${
+						planType ? "text-MarineBlue" : "text-CoolGray"
+					}`}
+				>
+					Yearly
+				</h2>
+			</section>
+		</>
 	);
 }
 

@@ -1,5 +1,5 @@
+import AddOnsSummary from "./components/AddonsSummary";
 import PlanSummary from "./components/PlanSummary";
-import AddOnsSummary from "./components/AddOnsSummary";
 import PriceSummary from "./components/PriceSummary";
 
 function Summary() {
