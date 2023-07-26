@@ -66,6 +66,7 @@ export type ContextType = {
 	handleSetPlanType: () => void;
 	handleSubmitFinish: () => void;
 	finished: boolean;
+	setFormData: Function;
 };
 
 export const Context = createContext<Partial<ContextType>>({});
@@ -176,9 +177,12 @@ function ContextProvider({ children, steps }: ContextProps) {
 	const isRadioSelected = (name: string) => {
 		return formData.plan.selected == name;
 	};
+
 	const handleSetPlanType = () => {
 		setPlanType((prev) => !prev);
+	
 	};
+
 	const handlePersonalizeChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
 		setFormData((prev) => {
@@ -237,6 +241,7 @@ function ContextProvider({ children, steps }: ContextProps) {
 		handleSetPlanType,
 		handleSubmitFinish,
 		finished,
+		setFormData,
 	};
 
 	return <Context.Provider value={ContextData}>{children}</Context.Provider>;

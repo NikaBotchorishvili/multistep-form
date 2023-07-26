@@ -3,23 +3,28 @@ import Input from "./components/input";
 import { Context } from "../../../Context/MultiStepContext";
 
 function SelectYourPlan() {
-	const { planType, handleSetPlanType } = useContext(Context);
+	const { planType, handleSetPlanType, setFormData, formData } =
+		useContext(Context);
 
-	// const inputData = {
-	// 	monthly: {
-	// 		arcade: 9,
-	// 		advanced: 12,
-	// 		pro: 15,
-	// 	},
-	// 	yearly: {
-	// 		arcade: 90,
-	// 		advanced: 120,
-	// 		pro: 150,
-	// 	},
-	// };
 	useEffect(() => {
-
-	}, [planType])
+		if (formData.plan.price) {
+			setFormData((prev) => {
+				return {
+					...prev,
+					plan: {
+						...prev.plan,
+						type: !planType ? "monthly" : "yearly",
+						price: !planType
+							? prev.plan.price / 10
+							: prev.plan.price * 10,
+					},	
+				};
+			});
+			// 	Solution for the price isn't really good but it works in this case cause the price for every yearly plan
+			// 	is 10 times more than the corresponding monthly plan.
+		}
+	}, [planType]);
+	console.log(formData?.plan)
 	const content = !planType ? (
 		<>
 			<Input
