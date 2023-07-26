@@ -24,7 +24,6 @@ function SelectYourPlan() {
 			// 	is 10 times more than the corresponding monthly plan.
 		}
 	}, [planType]);
-	console.log(formData?.plan)
 	const content = !planType ? (
 		<>
 			<Input

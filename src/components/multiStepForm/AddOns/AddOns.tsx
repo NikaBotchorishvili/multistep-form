@@ -6,7 +6,6 @@ function AddOns() {
 	return (
 		<form className="flex flex-col gap-4">
 			{formData?.addOns.map((addOn, index) => {
-				console.log(addOn.selected);
 				return (
 					<CheckBoxInput
 						key={index}

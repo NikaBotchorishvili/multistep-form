@@ -88,7 +88,7 @@ function ContextProvider({ children, steps }: ContextProps) {
 		plan: {},
 		addOns: [
 			{
-				name: "online services",
+				name: "Online Services",
 				price: 1,
 				description: "Access to multiplayer games",
 				selected: false,
@@ -180,7 +180,6 @@ function ContextProvider({ children, steps }: ContextProps) {
 
 	const handleSetPlanType = () => {
 		setPlanType((prev) => !prev);
-	
 	};
 
 	const handlePersonalizeChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -195,34 +194,37 @@ function ContextProvider({ children, steps }: ContextProps) {
 
 	const handleAddOnChange = (name: string) => {
 		setFormData((prev) => {
-			const updatedAddOns = prev.addOns.map((addOn) => {
-				if (addOn.name === name) {
-					return { ...addOn, selected: !addOn.selected };
-				} else {
-					return addOn;
+			const updatedAddOns = prev.addOns.map(addOn => {
+				if(addOn.name == name){
+					return {...addOn, selected: !addOn.selected }
 				}
-			});
-
+				return addOn
+			})
 			return {
 				...prev,
-				addons: updatedAddOns,
+				addOns: updatedAddOns,
 			};
 		});
 	};
 
-	const handleSelectPlanChange = (price: number, plan: string) => {
+	const handleSelectPlanChange = (
+		price: number,
+		planName: string,
+		type: string
+	) => {
 		setFormData((prev) => {
-			console.log(prev.plan);
 			return {
 				...prev,
-				plan: { ...prev.plan, price: price, selected: plan },
+				plan: { type: type, price: price, selected: planName },
 			};
 		});
 	};
 
 	const handleSubmitFinish = () => {
-		setFinished(prev => !prev);
+		setFinished((prev) => !prev);
 	};
+
+	const summaryCalculations = () => {};
 	const ContextData: Required<ContextType> = {
 		currentStepIndex,
 		step: steps[currentStepIndex],

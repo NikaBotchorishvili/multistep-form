@@ -1,6 +1,6 @@
 import { Context } from "../../../../Context/MultiStepContext";
-
 import { useContext } from "react";
+import Capitalize from "../../../../helpers/Capitalize";
 type Props = {
 	PlanName: string;
 	icon: string;
@@ -21,7 +21,7 @@ function Input({ icon, PlanName, price, type }: Props) {
 				name={PlanName}
 				className="absolute  w-full h-full opacity-0 top-0 left-0"
 				checked={isRadioSelected(PlanName)}
-				onChange={() => handleSelectPlanChange(price, PlanName)}
+				onChange={() => handleSelectPlanChange(price, PlanName, type)}
 			/>
 			<label
 				className="w-full h-full flex flex-col justify-between "
@@ -30,7 +30,7 @@ function Input({ icon, PlanName, price, type }: Props) {
 				<img className="h-min mr-auto" src={icon} alt={PlanName} />
 				<div>
 					<h2 className="text-MarineBlue">
-						{PlanName[0].toUpperCase() + PlanName.slice(1)}
+						{Capitalize(PlanName)}
 					</h2>
 					<small className="text-CoolGray">
 						${price}/{type == "monthly" ? "month" : "year"}

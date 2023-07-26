@@ -1,4 +1,4 @@
-import AddOnsSummary from "./components/AddonsSummary";
+import AddOnsSummary from "./components/AddOnsSummary";
 import PlanSummary from "./components/PlanSummary";
 import PriceSummary from "./components/PriceSummary";
 
