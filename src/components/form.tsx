@@ -4,7 +4,7 @@ import { Context } from "../Context/MultiStepContext";
 import Sidebar from "./Sidebar";
 import Title from "./multiStepForm/components/Title";
 import ThankYou from "./thankYou";
-
+import { ContextType } from "../Context/Types";
 function Form() {
 	const {
 		currentStepIndex,
@@ -14,7 +14,7 @@ function Form() {
 		steps,
 		handleSubmitFinish,
 		finished,
-	} = useContext(Context);
+	} = useContext(Context) as Required<Partial<ContextType>>;
 	return (
 		<main className="flex md:flex-row flex-col h-[600px] shadow-md w-[1000px] justify-around p-5 bg-White rounded-3xl">
 			<Sidebar currentStepIndex={currentStepIndex} />

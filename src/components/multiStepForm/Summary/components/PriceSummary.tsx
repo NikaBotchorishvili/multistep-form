@@ -1,8 +1,8 @@
 import { useContext } from "react";
 import { Context } from "../../../../Context/MultiStepContext";
-
+import { ContextType } from "../../../../Context/Types";
 function PriceSummary() {
-	const { totalPrice } = useContext(Context);
+	const { totalPrice } = useContext(Context)  as Required<Partial<ContextType>>;
 	totalPrice()
 	return (
 		<article className="flex justify-between">

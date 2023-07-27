@@ -1,10 +1,10 @@
 import { useContext } from "react";
 import { Context } from "../Context/MultiStepContext";
-
+import { ContextType } from "../Context/Types";
 
 
 function Sidebar() {
-	const {currentStepIndex, sidebar, goto } = useContext(Context);
+	const {currentStepIndex, sidebar, goto } = useContext(Context)  as Required<Partial<ContextType>>;;
 
 	const content = sidebar?.map((el, index) => {
 		return (

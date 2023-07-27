@@ -1,6 +1,7 @@
 import { Context } from "../../../../Context/MultiStepContext";
 import { useContext } from "react";
 import Capitalize from "../../../../helpers/Capitalize";
+import { ContextType } from "../../../../Context/Types";
 type Props = {
 	PlanName: string;
 	icon: string;
@@ -9,7 +10,7 @@ type Props = {
 };
 
 function Input({ icon, PlanName, price, type }: Props) {
-	const { isRadioSelected, handleSelectPlanChange } = useContext(Context);
+	const { isRadioSelected, handleSelectPlanChange } = useContext(Context)  as Required<Partial<ContextType>>;;
 	return (
 		<div
 			className={`h-36 md:w-32 p-4 md:box-content border border-LightGray rounded-lg cursor-pointer w-full relative ${

@@ -1,8 +1,11 @@
 import { useContext } from "react";
 import { Context } from "../../../../Context/MultiStepContext";
 import Capitalize from "../../../../helpers/Capitalize";
+import { ContextType } from "../../../../Context/Types";
 function PlanSummary() {
-	const { goto, formData } = useContext(Context);
+
+	const { goto, formData } =
+	useContext(Context) as Required<Partial<ContextType>>
 	const planFormatted = `${Capitalize(formData?.plan.selected)} (${Capitalize(
 		formData?.plan.type
 	)}) `;

@@ -1,10 +1,10 @@
 import { useContext, useEffect } from "react";
 import Input from "./components/input";
 import { Context } from "../../../Context/MultiStepContext";
-
+import { ContextType } from "../../../Context/Types";
 function SelectYourPlan() {
-	const { planType, handleSetPlanType, setFormData, formData } =
-		useContext(Context);
+	const { planType, handleSetPlanType, setFormData } =
+		useContext(Context) as Required<Partial<ContextType>>; 
 
 	useEffect(() => {
 		if (planType) {

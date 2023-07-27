@@ -1,16 +1,13 @@
-import { FormEvent, useContext } from "react";
+import { useContext } from "react";
 import { Context } from "../../Context/MultiStepContext";
-
+import { ContextType } from "../../Context/Types";
 function PersonalInfo() {
-	const { handlePersonalizeChange, formData } = useContext(Context);
-	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-	};
+	const { handlePersonalizeChange, formData } = useContext(
+		Context
+	) as Required<Partial<ContextType>>;
+
 	return (
-		<form
-			className="flex flex-col gap-5"
-			onSubmit={(e) => handlePersonalizeChange(e)}
-		>
+		<form className="flex flex-col gap-5">
 			<div className="flex flex-col gap-2">
 				<label className="text-MarineBlue " htmlFor="name">
 					Name
@@ -48,7 +45,7 @@ function PersonalInfo() {
 					value={formData?.personalize.phone_number}
 					placeholder="e.g. +1 234 567 890"
 					required
-					onChange={(e) => handleChange(e)}
+					onChange={(e) => handlePersonalizeChange(e)}
 				/>
 			</div>
 		</form>
