@@ -4,9 +4,10 @@ import Capitalize from "../../../../helpers/Capitalize";
 import { ContextType } from "../../../../Context/Types";
 
 function PlanSummary() {
-	const { goto, formData, planType, typeAbbreviation } = useContext(Context) as Required<Partial<ContextType>>
+	const { goto, formData, getType, typeAbbreviation, getPlanPrice } =
+		useContext(Context) as Required<Partial<ContextType>>;
 	const planFormatted = `${Capitalize(formData?.plan.selected)} (${Capitalize(
-		formData?.plan.type
+		getType()
 	)}) `;
 	return (
 		<article className="flex justify-between items-center border-b border-CoolGray pb-4 box-content">
@@ -21,7 +22,9 @@ function PlanSummary() {
 					Change
 				</button>
 			</div>
-			<h3>${formData?.plan.price}/{typeAbbreviation()}</h3>
+			<h3>
+				${getPlanPrice(formData.plan.selected)}/{typeAbbreviation()}
+			</h3>
 		</article>
 	);
 }

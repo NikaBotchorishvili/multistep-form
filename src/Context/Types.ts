@@ -12,22 +12,47 @@ export type Personalize = {
 
 export type PlanType = "monthly" | "yearly";
 
+
+export type PlanName =  "arcade" | "advanced" | "pro";
 export type Plan = {
-	type: PlanType;
-	selected: string;
+	selected: PlanName;
 	price: number;
 };
 
-export type addOn = {
-	name: string;
-	price: number;
+export type AddonName = "Online Services" | "Larger Storage" | "Customizable Profile";
+export type AddOn = {
+	name: AddonName;
 	description: string;
-	selected: boolean;
+	selected: boolean
 };
+
+export type AddOnPrice = {
+	"Online Services": number,
+	"Larger Storage": number,
+	"Customizable Profile": number,
+}
+
+export type PlanPrice = {
+	arcade: number,
+	advanced: number,
+	pro: number,
+}
+
+export type PriceList = {
+	addons: {
+		monthly: AddOnPrice,
+		yearly: AddOnPrice,
+	},
+	plans: {
+		monthly: PlanPrice,
+		yearly: PlanPrice
+	}
+}
+
 export type FormData = {
 	personalize: Personalize;
 	plan: Plan;
-	addOns: addOn[];
+	addOns: AddOn[];
 };
 
 export type TitleType = {
@@ -61,20 +86,22 @@ export type ContextType = {
 	handlePersonalizeChange: (e: ChangeEvent<HTMLInputElement>) => void;
 	handleSelectPlanChange: (
 		price: number,
-		plan: string,
-		type: PlanType
+		plan: PlanName,
 	) => void;
 	handleAddOnChange: (name: string) => void;
 	title: TitleType;
 	formData: FormData;
 	sidebar: SidebarType[];
-	planType: boolean;
 	handleSetPlanType: () => void;
 	handleSubmitFinish: () => void;
 	finished: boolean;
 	setFormData: Function;
 	totalPrice: () => number;
 	errors: ErrorsType;
-	typeAbbreviation: () => "mo" | "yr"
+	typeAbbreviation: () => "mo" | "yr";
+	pricesList: PriceList;
+	getAddonPrice: (name: AddonName) => number;
+	getPlanPrice: (name: PlanName) => number
+	getType: () => "monthly"| "yearly";
 };
 

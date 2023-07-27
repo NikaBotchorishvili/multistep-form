@@ -4,8 +4,10 @@ import {
 	ContextType,
 	FormData,
 	TitleType,
-	PlanType,
-	ErrorsType
+	ErrorsType,
+	PriceList,
+	AddonName,
+	PlanName,
 } from "./Types";
 import sidebarData from "./data/SideBarData";
 import titlesData from "./data/TitleData";
@@ -28,35 +30,31 @@ function ContextProvider({ children, steps }: ContextProps) {
 		plan: {
 			price: 9,
 			selected: "arcade",
-			type: "monthly",
 		},
 		addOns: [
 			{
 				name: "Online Services",
-				price: 1,
 				description: "Access to multiplayer games",
 				selected: false,
 			},
 			{
 				name: "Larger Storage",
-				price: 2,
 				description: "extra 1TB of cloud service",
 				selected: false,
 			},
 			{
 				name: "Customizable Profile",
-				price: 2,
 				description: "Custom theme on your profile",
 				selected: false,
 			},
 		],
 	});
 
-	const [ errors, setErrors ] = useState<ErrorsType>({
+	const [errors, setErrors] = useState<ErrorsType>({
 		name: null,
 		email: null,
-		phone_number: null
-	})
+		phone_number: null,
+	});
 
 	const title: TitleType = titlesData[currentStepIndex];
 
@@ -114,74 +112,118 @@ function ContextProvider({ children, steps }: ContextProps) {
 		});
 	};
 
-	const handleSelectPlanChange = (
-		price: number,
-		planName: string,
-		type: PlanType
-	) => {
+	const handleSelectPlanChange = (price: number, planName: PlanName) => {
 		setFormData((prev) => {
 			return {
 				...prev,
-				plan: { type: type, price: price, selected: planName },
+				plan: { price: price, selected: planName },
 			};
 		});
 	};
 
-
-
 	const handleSubmitFinish = () => {
-		const {email, phone_number, name} = formData.personalize
+		const { email, phone_number, name } = formData.personalize;
 		const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-		const phoneNumberRegex = /^(\+\d{1,2}\s?)?(\(\d{3}\)|\d{3})([\s.-]?)\d{3}([\s.-]?)\d{4}$/;
+		const phoneNumberRegex =
+			/^(\+\d{1,2}\s?)?(\(\d{3}\)|\d{3})([\s.-]?)\d{3}([\s.-]?)\d{4}$/;
 		const nameRegex = /^[a-z ,.'-]+$/i;
 		const errs: ErrorsType = {
 			name: null,
 			email: null,
 			phone_number: null,
-		}
-		if(email === ""){
-			errs.email = "This field is required"
-		} else if(!emailRegex.test(email)){
-			errs.email = "Invalid Email"
-		}
-
-		if(phone_number === ""){
-			errs.phone_number = "This field is required"
-		}else if(!phoneNumberRegex.test(phone_number)){
-			errs.phone_number = "Invalid number"
+		};
+		if (email === "") {
+			errs.email = "This field is required";
+		} else if (!emailRegex.test(email)) {
+			errs.email = "Invalid Email";
 		}
 
-		if(name === ""){
-			errs.name = "This field is required"
-		}else if(!nameRegex.test(name)){
+		if (phone_number === "") {
+			errs.phone_number = "This field is required";
+		} else if (!phoneNumberRegex.test(phone_number)) {
+			errs.phone_number = "Invalid number";
+		}
+
+		if (name === "") {
+			errs.name = "This field is required";
+		} else if (!nameRegex.test(name)) {
 			errs.name = "Invalid Name";
 		}
 
-		if(Object.values(errs).filter(err => err != null).length == 0){
+		if (Object.values(errs).filter((err) => err != null).length == 0) {
 			setFinished((prev) => !prev);
-		}else{
+		} else {
 			setErrors(errs);
-			goto(0)
+			goto(0);
 		}
+	};
+	const pricesList: PriceList = {
+		addons: {
+			monthly: {
+				"Online Services": 1,
+				"Larger Storage": 2,
+				"Customizable Profile": 2,
+			},
+			yearly: {
+				"Online Services": 10,
+				"Larger Storage": 20,
+				"Customizable Profile": 20,
+			},
+		},
+		plans: {
+			monthly: {
+				arcade: 9,
+				advanced: 12,
+				pro: 15,
+			},
+			yearly: {
+				arcade: 90,
+				advanced: 120,
+				pro: 150,
+			},
+		},
+	};
+
+	const getType = () => {
+		return !planType ? "monthly" : "yearly";
+	};
+
+	const getAddonPrice = (name: AddonName) => {
+		return pricesList.addons[getType()][name];
+	};
+
+	const getPlanPrice = (name: PlanName) => {
+		return pricesList.plans[getType()][name];
 	};
 
 	const totalPrice = () => {
 		const { addOns } = formData;
 
-		const addOnPrices = addOns.map((addOn) => {
-			return addOn.price;
-		});
+		const addOnPrices: number[] = addOns
+			.filter((addOn) => addOn.selected)
+			.map((addOn) => {
+				const { name } = addOn;
 
+				return getAddonPrice(name);
+			});
+
+		const addOnPrice =
+			addOnPrices.length == 0
+				? 0
+				: addOnPrices.reduce((a, b) => {
+						return a + b;
+				  });
 		const totalPrice =
-			addOnPrices.reduce((a, b) => {
-				return a + b;
-			}) + formData.plan.price;
+			addOnPrice +
+			pricesList.plans[!planType ? "monthly" : "yearly"][
+				formData.plan.selected
+			];
 		return totalPrice;
 	};
 
 	const typeAbbreviation = () => {
-		return !planType? "mo": "yr"
-	}
+		return !planType ? "mo" : "yr";
+	};
 
 	const ContextData: Required<ContextType> = {
 		currentStepIndex,
@@ -197,7 +239,6 @@ function ContextProvider({ children, steps }: ContextProps) {
 		title,
 		sidebar: sidebarData,
 		isRadioSelected,
-		planType,
 		handleSetPlanType,
 		handleSubmitFinish,
 		finished,
@@ -205,6 +246,10 @@ function ContextProvider({ children, steps }: ContextProps) {
 		totalPrice,
 		errors,
 		typeAbbreviation,
+		pricesList,
+		getAddonPrice,
+		getPlanPrice,
+		getType,
 	};
 
 	return <Context.Provider value={ContextData}>{children}</Context.Provider>;
