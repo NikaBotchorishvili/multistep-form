@@ -7,21 +7,30 @@ function SelectYourPlan() {
 		useContext(Context);
 
 	useEffect(() => {
-		if (formData.plan.price) {
+		if (planType) {
 			setFormData((prev) => {
 				return {
 					...prev,
 					plan: {
 						...prev.plan,
 						type: !planType ? "monthly" : "yearly",
-						price: !planType
-							? prev.plan.price / 10
-							: prev.plan.price * 10,
+						price: prev.plan.price * 10,
 					},	
 				};
-			});
+			})
 			// 	Solution for the price isn't really good but it works in this case cause the price for every yearly plan
 			// 	is 10 times more than the corresponding monthly plan.
+		}else{
+			setFormData((prev) => {
+				return {
+					...prev,
+					plan: {
+						...prev.plan,
+						type: !planType ? "monthly" : "yearly",
+						price: prev.plan.price * 10,
+					},	
+				};
+			})
 		}
 	}, [planType]);
 	const content = !planType ? (

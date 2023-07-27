@@ -1,4 +1,9 @@
+import { useContext } from "react";
+import { Context } from "../../../../Context/MultiStepContext";
+
 function PriceSummary() {
+	const { totalPrice } = useContext(Context);
+	totalPrice()
 	return (
 		<article className="flex justify-between">
 			<h2 className="text-CoolGray">Total (per month)</h2>

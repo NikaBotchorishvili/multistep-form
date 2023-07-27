@@ -1,74 +1,13 @@
+import { createContext, useState, ChangeEvent } from "react";
 import {
-	createContext,
-	useState,
-	ReactElement,
-	ReactNode,
-	ChangeEvent,
-} from "react";
-
-type ContextProps = {
-	children: ReactNode;
-	steps: ReactElement[];
-};
-
-type Personalize = {
-	name: string;
-	email: string;
-	phone_number: string;
-};
-
-type PlanType = "monthly" | "yearly";
-
-type Plan = {
-	type: PlanType;
-	selected: string;
-	price: number;
-};
-
-type addOn = {
-	name: string;
-	price: number;
-	description: string;
-	selected: boolean;
-};
-type formData = {
-	personalize: Personalize;
-	plan: Plan | {};
-	addOns: addOn[];
-};
-
-type titleType = {
-	title: string;
-	description: string;
-};
-
-type Sidebar = {
-	number: number;
-	step: string;
-	title: string;
-};
-
-export type ContextType = {
-	currentStepIndex: number;
-	step: ReactElement;
-	steps: ReactElement[];
-	back: () => void;
-	next: () => void;
-	goto: (index: number) => void;
-	isRadioSelected: (name: string) => boolean;
-	handlePersonalizeChange: (e: ChangeEvent<HTMLInputElement>) => void;
-	handleSelectPlanChange: (price: number, plan: string) => void;
-	handleAddOnChange: (name: string) => void;
-	title: titleType;
-	formData: formData;
-	sidebar: Sidebar[];
-	planType: boolean;
-	handleSetPlanType: () => void;
-	handleSubmitFinish: () => void;
-	finished: boolean;
-	setFormData: Function;
-};
-
+	ContextProps,
+	ContextType,
+	FormData,
+	TitleType,
+	PlanType,
+} from "./Types";
+import sidebarData from "./data/SideBarData";
+import titlesData from "./data/TitleData";
 export const Context = createContext<Partial<ContextType>>({});
 
 function ContextProvider({ children, steps }: ContextProps) {
@@ -79,13 +18,17 @@ function ContextProvider({ children, steps }: ContextProps) {
 
 	const [finished, setFinished] = useState(false);
 
-	const [formData, setFormData] = useState<formData>({
+	const [formData, setFormData] = useState<FormData>({
 		personalize: {
 			name: "",
 			email: "",
 			phone_number: "",
 		},
-		plan: {},
+		plan: {
+			price: 9,
+			selected: "arcade",
+			type: "monthly",
+		},
 		addOns: [
 			{
 				name: "Online Services",
@@ -108,50 +51,8 @@ function ContextProvider({ children, steps }: ContextProps) {
 		],
 	});
 
-	const titles: titleType[] = [
-		{
-			title: "Personal Info",
-			description:
-				"Please provide your name, email address and phone number",
-		},
-		{
-			title: "Select Your Plan",
-			description: "You have the option of monthly or yearly billing.",
-		},
-		{
-			title: "Pick Add-ons",
-			description: "Add-ons help enhance your gaming experience",
-		},
-		{
-			title: "Finishing Up",
-			description: "Double-check everything looks OK before confirming.",
-		},
-	];
 
-	const sidebar: Sidebar[] = [
-		{
-			number: 1,
-			step: "Step 1",
-			title: "YOUR INFO",
-		},
-		{
-			number: 2,
-			step: "Step 2",
-			title: "SELECT PLAN",
-		},
-		{
-			number: 3,
-			step: "Step 3",
-			title: "ADD-ONS",
-		},
-		{
-			number: 4,
-			step: "Step 4",
-			title: "SUMMARY",
-		},
-	];
-
-	const title: titleType = titles[currentStepIndex];
+	const title: TitleType = titlesData[currentStepIndex];
 
 	const next = () => {
 		setCurrentStepIndex((prevCurrentStepIndex) => {
@@ -194,12 +95,12 @@ function ContextProvider({ children, steps }: ContextProps) {
 
 	const handleAddOnChange = (name: string) => {
 		setFormData((prev) => {
-			const updatedAddOns = prev.addOns.map(addOn => {
-				if(addOn.name == name){
-					return {...addOn, selected: !addOn.selected }
+			const updatedAddOns = prev.addOns.map((addOn) => {
+				if (addOn.name == name) {
+					return { ...addOn, selected: !addOn.selected };
 				}
-				return addOn
-			})
+				return addOn;
+			});
 			return {
 				...prev,
 				addOns: updatedAddOns,
@@ -210,7 +111,7 @@ function ContextProvider({ children, steps }: ContextProps) {
 	const handleSelectPlanChange = (
 		price: number,
 		planName: string,
-		type: string
+		type: PlanType
 	) => {
 		setFormData((prev) => {
 			return {
@@ -224,7 +125,20 @@ function ContextProvider({ children, steps }: ContextProps) {
 		setFinished((prev) => !prev);
 	};
 
-	const summaryCalculations = () => {};
+	const totalPrice = () => {
+		const { addOns } = formData;
+
+		const addOnPrices = addOns.map((addOn) => {
+			return addOn.price;
+		});
+
+		const totalPrice =
+			addOnPrices.reduce((a, b) => {
+				return a + b;
+			}) + formData.plan.price;
+		console.log(totalPrice);
+		return totalPrice;
+	};
 	const ContextData: Required<ContextType> = {
 		currentStepIndex,
 		step: steps[currentStepIndex],
@@ -237,13 +151,14 @@ function ContextProvider({ children, steps }: ContextProps) {
 		handleAddOnChange,
 		formData,
 		title,
-		sidebar,
+		sidebar: sidebarData,
 		isRadioSelected,
 		planType,
 		handleSetPlanType,
 		handleSubmitFinish,
 		finished,
 		setFormData,
+		totalPrice,
 	};
 
 	return <Context.Provider value={ContextData}>{children}</Context.Provider>;
