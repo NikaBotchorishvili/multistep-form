@@ -5,6 +5,7 @@ import {
 	FormData,
 	TitleType,
 	PlanType,
+	ErrorsType
 } from "./Types";
 import sidebarData from "./data/SideBarData";
 import titlesData from "./data/TitleData";
@@ -51,6 +52,11 @@ function ContextProvider({ children, steps }: ContextProps) {
 		],
 	});
 
+	const [ errors, setErrors ] = useState<ErrorsType>({
+		name: null,
+		email: null,
+		phone_number: null
+	})
 
 	const title: TitleType = titlesData[currentStepIndex];
 
@@ -121,8 +127,42 @@ function ContextProvider({ children, steps }: ContextProps) {
 		});
 	};
 
+
+
 	const handleSubmitFinish = () => {
-		setFinished((prev) => !prev);
+		const {email, phone_number, name} = formData.personalize
+		const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+		const phoneNumberRegex = /^(\+\d{1,2}\s?)?(\(\d{3}\)|\d{3})([\s.-]?)\d{3}([\s.-]?)\d{4}$/;
+		const nameRegex = /^[a-z ,.'-]+$/i;
+		const errs: ErrorsType = {
+			name: null,
+			email: null,
+			phone_number: null,
+		}
+		if(email === ""){
+			errs.email = "This field is required"
+		} else if(!emailRegex.test(email)){
+			errs.email = "Invalid Email"
+		}
+
+		if(phone_number === ""){
+			errs.phone_number = "This field is required"
+		}else if(!phoneNumberRegex.test(phone_number)){
+			errs.phone_number = "Invalid number"
+		}
+
+		if(name === ""){
+			errs.name = "This field is required"
+		}else if(!nameRegex.test(name)){
+			errs.name = "Invalid Name";
+		}
+
+		if(Object.values(errs).filter(err => err != null).length == 0){
+			setFinished((prev) => !prev);
+		}else{
+			setErrors(errs);
+			goto(0)
+		}
 	};
 
 	const totalPrice = () => {
@@ -159,6 +199,7 @@ function ContextProvider({ children, steps }: ContextProps) {
 		finished,
 		setFormData,
 		totalPrice,
+		errors
 	};
 
 	return <Context.Provider value={ContextData}>{children}</Context.Provider>;

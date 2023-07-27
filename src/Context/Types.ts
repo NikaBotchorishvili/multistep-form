@@ -65,4 +65,11 @@ export type ContextType = {
 	finished: boolean;
 	setFormData: Function;
 	totalPrice: () => number;
+	errors: ErrorsType
 };
+
+export type ErrorsType = {
+	name: null | string,
+	email: null | string,
+	phone_number: null | string,
+}
