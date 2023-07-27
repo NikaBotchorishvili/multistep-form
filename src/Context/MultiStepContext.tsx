@@ -28,7 +28,6 @@ function ContextProvider({ children, steps }: ContextProps) {
 			phone_number: "",
 		},
 		plan: {
-			price: 9,
 			selected: "arcade",
 		},
 		addOns: [
@@ -112,11 +111,11 @@ function ContextProvider({ children, steps }: ContextProps) {
 		});
 	};
 
-	const handleSelectPlanChange = (price: number, planName: PlanName) => {
+	const handleSelectPlanChange = (planName: PlanName) => {
 		setFormData((prev) => {
 			return {
 				...prev,
-				plan: { price: price, selected: planName },
+				plan: { selected: planName },
 			};
 		});
 	};
@@ -250,6 +249,7 @@ function ContextProvider({ children, steps }: ContextProps) {
 		getAddonPrice,
 		getPlanPrice,
 		getType,
+		planType,
 	};
 
 	return <Context.Provider value={ContextData}>{children}</Context.Provider>;

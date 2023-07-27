@@ -3,29 +3,22 @@ import Input from "./components/input";
 import { Context } from "../../../Context/MultiStepContext";
 import {ContextType} from "../../../Context/Types"
 function SelectYourPlan() {
-	const { planType, handleSetPlanType } =
+	const { handleSetPlanType, planType} =
 		useContext(Context) as Required<Partial<ContextType>>
 
-	const planTypeString = !planType? "monthly": "yearly"
 	const content =   (
 		<>
 			<Input
 				icon="/images/icon-arcade.svg"
 				PlanName="arcade"
-				price={!planType? 9: 90}
-				type={planTypeString}
 			/>
 			<Input
 				icon="/images/icon-advanced.svg"
 				PlanName="advanced"
-				price={!planType? 12: 120}
-				type={planTypeString}
 			/>
 			<Input
 				icon="/images/icon-pro.svg"
 				PlanName="pro"
-				price={!planType? 15: 150}
-				type={planTypeString}
 			/>
 		</>
 	)

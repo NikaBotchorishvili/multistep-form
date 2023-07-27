@@ -16,7 +16,6 @@ export type PlanType = "monthly" | "yearly";
 export type PlanName =  "arcade" | "advanced" | "pro";
 export type Plan = {
 	selected: PlanName;
-	price: number;
 };
 
 export type AddonName = "Online Services" | "Larger Storage" | "Customizable Profile";
@@ -85,7 +84,6 @@ export type ContextType = {
 	isRadioSelected: (name: string) => boolean;
 	handlePersonalizeChange: (e: ChangeEvent<HTMLInputElement>) => void;
 	handleSelectPlanChange: (
-		price: number,
 		plan: PlanName,
 	) => void;
 	handleAddOnChange: (name: string) => void;
@@ -103,5 +101,6 @@ export type ContextType = {
 	getAddonPrice: (name: AddonName) => number;
 	getPlanPrice: (name: PlanName) => number
 	getType: () => "monthly"| "yearly";
+	planType: boolean
 };
 
