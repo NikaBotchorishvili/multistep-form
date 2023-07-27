@@ -74,6 +74,7 @@ export type ContextType = {
 	finished: boolean;
 	setFormData: Function;
 	totalPrice: () => number;
-	errors: ErrorsType
+	errors: ErrorsType;
+	typeAbbreviation: () => "mo" | "yr"
 };
 

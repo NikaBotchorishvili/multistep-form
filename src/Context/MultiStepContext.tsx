@@ -176,9 +176,13 @@ function ContextProvider({ children, steps }: ContextProps) {
 			addOnPrices.reduce((a, b) => {
 				return a + b;
 			}) + formData.plan.price;
-		console.log(totalPrice);
 		return totalPrice;
 	};
+
+	const typeAbbreviation = () => {
+		return !planType? "mo": "yr"
+	}
+
 	const ContextData: Required<ContextType> = {
 		currentStepIndex,
 		step: steps[currentStepIndex],
@@ -199,7 +203,8 @@ function ContextProvider({ children, steps }: ContextProps) {
 		finished,
 		setFormData,
 		totalPrice,
-		errors
+		errors,
+		typeAbbreviation,
 	};
 
 	return <Context.Provider value={ContextData}>{children}</Context.Provider>;
