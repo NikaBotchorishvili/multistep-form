@@ -15,6 +15,7 @@ module.exports = {
 			Magnolia: "hsl(217, 100%, 97%)",
 			Alabaster: "hsl(231, 100%, 99%)",
 			White: "hsl(0, 0%, 100%)",
+			background: "#EFF5FF"
 		},
 		fontFamily: {
 			sans: ["'Ubuntu', sans-serif", ...defaultTheme.fontFamily.sans],

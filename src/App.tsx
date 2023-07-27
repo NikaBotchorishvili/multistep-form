@@ -1,4 +1,4 @@
-import Form from "./components/form";
+import Form from "./components/multiStepForm/form";
 import "./index.css"
 import ContextProvider from "./Context/MultiStepContext";
 import PersonalInfo from "./components/multiStepForm/Personalize/PersonalInfo";

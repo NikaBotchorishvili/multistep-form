@@ -30,11 +30,11 @@ function PersonalInfo() {
 			<Input
 				label="Phone Number"
 				name="phone_number"
-				error={errors.email}
-				value={formData.personalize.email}
+				error={errors.phone_number}
+				value={formData.personalize.phone_number}
 				placeholder="e.g. +1 234 567 890"
 				handler={handlePersonalizeChange}
-				type="email"
+				type="text"
 			/>
 		</form>
 	);

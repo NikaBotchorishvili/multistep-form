@@ -1,38 +1,12 @@
 import { useContext, useEffect } from "react";
 import Input from "./components/input";
 import { Context } from "../../../Context/MultiStepContext";
-import { ContextType } from "../../../Context/Types";
+import {ContextType} from "../../../Context/Types"
 function SelectYourPlan() {
-	const { planType, handleSetPlanType, setFormData } =
-		useContext(Context) as Required<Partial<ContextType>>; 
+	const { planType, handleSetPlanType } =
+		useContext(Context) as Required<Partial<ContextType>>
 
-	useEffect(() => {
-		if (planType) {
-			setFormData((prev) => {
-				return {
-					...prev,
-					plan: {
-						...prev.plan,
-						type: !planType ? "monthly" : "yearly",
-						price: prev.plan.price * 10,
-					},	
-				};
-			})
-			// 	Solution for the price isn't really good but it works in this case cause the price for every yearly plan
-			// 	is 10 times more than the corresponding monthly plan.
-		}else{
-			setFormData((prev) => {
-				return {
-					...prev,
-					plan: {
-						...prev.plan,
-						type: !planType ? "monthly" : "yearly",
-						price: prev.plan.price * 10,
-					},	
-				};
-			})
-		}
-	}, [planType]);
+
 	const content = !planType ? (
 		<>
 			<Input
@@ -77,8 +51,8 @@ function SelectYourPlan() {
 		</>
 	);
 	return (
-		<>
-			<form className="flex gap-4 md:flex-row flex-col md:w-fit w-full ">
+		<div className="mb-40 flex  flex-col justify-center md:gap-y-6 gap-y-10">
+			<form className="flex gap-4 md:flex-row flex-col  md:w-fit w-full ">
 				{content}
 			</form>
 			<section className="flex  items-center gap-2 mx-auto">
@@ -110,7 +84,7 @@ function SelectYourPlan() {
 					Yearly
 				</h2>
 			</section>
-		</>
+		</div>
 	);
 }
 
