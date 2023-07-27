@@ -16,7 +16,6 @@ function Form() {
 		finished,
 		errors
 	} = useContext(Context) as Required<Partial<ContextType>>;
-	console.log(errors);
 	return (
 		<main className="flex md:flex-row flex-col h-[600px] shadow-md w-[1000px] justify-around p-5 bg-White rounded-3xl">
 			<Sidebar currentStepIndex={currentStepIndex} />

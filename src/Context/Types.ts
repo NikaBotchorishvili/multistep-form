@@ -41,6 +41,15 @@ export type SidebarType = {
 	title: string;
 };
 
+export type ErrorType = null | string;
+
+export type ErrorsType = {
+	name: ErrorType,
+	email: ErrorType,
+	phone_number: ErrorType,
+}
+
+
 export type ContextType = {
 	currentStepIndex: number;
 	step: ReactElement;
@@ -68,8 +77,3 @@ export type ContextType = {
 	errors: ErrorsType
 };
 
-export type ErrorsType = {
-	name: null | string,
-	email: null | string,
-	phone_number: null | string,
-}
