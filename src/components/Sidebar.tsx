@@ -33,7 +33,7 @@ function Sidebar() {
 		<div className="absolute top-0 left-0 md:relative">
 			<img
 				src="images/bg-sidebar-mobile.svg"
-				srcSet="images/bg-sidebar-desktop.svg 1000w, images/bg-sidebar-mobile.svg 767w"
+				srcSet=" images/bg-sidebar-mobile.svg 767w, images/bg-sidebar-desktop.svg 1000w"
 				sizes="(max-width: 767px) 767px, 1000px"
 				alt="sidebar image"
 				className="md:h-full w-screen md:w-full rounded-3xl"
